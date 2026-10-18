@@ -1,0 +1,154 @@
+---
+// The app's main views in one window, switched by tabs styled like the app's tab strip. The tabs
+// are radio inputs + :has(), so they work without JavaScript; Home is the default.
+const views = [
+  {
+    id: 'home',
+    tab: 'Home',
+    shot: 'home',
+    blurb: 'Net worth and the past year, every account, budget alerts and recent activity on one screen.',
+    alt: "Basalt's Home view: net worth of $1,283,627 with a one-year chart, account totals, top movers, budget alerts and recent transactions.",
+  },
+  {
+    id: 'networth',
+    tab: 'Net worth',
+    shot: 'networth',
+    blurb: 'Cash, investments, property and debt, grouped, with each account’s trend and where its balance comes from.',
+    alt: 'The Net worth view: assets and liabilities, a one-year chart, and accounts grouped by cash, investments, property and liabilities.',
+  },
+  {
+    id: 'spending',
+    tab: 'Spending',
+    shot: 'spending',
+    blurb: 'This month against budget, twelve months by category, and plain-language notes on what changed.',
+    alt: 'The Spending view: $6,438 of an $8,305 budget, twelve months of spending by category, trends, budget lines and transactions.',
+  },
+  {
+    id: 'holding',
+    tab: 'NVDA',
+    shot: 'holding',
+    blurb: 'Every holding priced and charted, with open lots, unrealized P/L and your own notes on the ticker.',
+    alt: 'A holding page for NVDA: a one-year price chart, position, average cost, unrealized gain, open lots and a thesis note.',
+  },
+];
+---
+
+<div class="tour">
+  <div class="tabs" role="radiogroup" aria-label="App views">
+    {
+      views.map((v, i) => (
+        <label class:list={['tab', `t-${v.id}`]}>
+          <input type="radio" name="tour" value={v.id} checked={i === 0} />
+          {v.tab}
+        </label>
+      ))
+    }
+  </div>
+  <p class="blurbs">
+    {views.map((v) => <span class={`b-${v.id}`}>{v.blurb}</span>)}
+  </p>
+  <div class="window frame">
+    {
+      views.map((v, i) => (
+        <picture class={`v-${v.id}`}>
+          <source srcset={`/shots/${v.shot}-light.webp`} media="(prefers-color-scheme: light)" />
+          <img
+            src={`/shots/${v.shot}-dark.webp`}
+            width="1320"
+            height="860"
+            alt={v.alt}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </picture>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 4px;
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    background: var(--sidebar);
+  }
+  .tab {
+    position: relative;
+    padding: 7px 16px;
+    border-radius: 7px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 550;
+    cursor: pointer;
+    user-select: none;
+    transition:
+      color 0.15s,
+      background 0.15s;
+  }
+  .tab:hover {
+    color: var(--ink);
+  }
+  .tab input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .tab:has(input:checked) {
+    background: var(--raised);
+    color: var(--ink);
+    box-shadow: 0 0 0 1px var(--hairline);
+  }
+  .tab:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .blurbs {
+    display: grid;
+    max-width: 640px;
+    min-height: 3.2em;
+    margin: 18px auto 32px;
+    color: var(--ink-2);
+    text-align: center;
+    text-wrap: balance;
+  }
+  .blurbs span {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .frame {
+    display: grid;
+  }
+  .frame picture {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .frame img {
+    width: 100%;
+  }
+
+  /* Show the checked view (and its blurb). */
+  .tour:has(.t-home input:checked) :is(.v-home, .b-home),
+  .tour:has(.t-networth input:checked) :is(.v-networth, .b-networth),
+  .tour:has(.t-spending input:checked) :is(.v-spending, .b-spending),
+  .tour:has(.t-holding input:checked) :is(.v-holding, .b-holding) {
+    opacity: 1;
+  }
+  /* Without :has() support, just show Home. */
+  @supports not selector(:has(*)) {
+    .v-home,
+    .b-home {
+      opacity: 1;
+    }
+    .tabs {
+      display: none;
+    }
+  }
+</style>
