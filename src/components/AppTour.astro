@@ -24,11 +24,11 @@ const views = [
     alt: 'The Spending view: $6,438 of an $8,305 budget, twelve months of spending by category, trends, budget lines and transactions.',
   },
   {
-    id: 'holding',
-    tab: 'NVDA',
-    shot: 'holding',
-    blurb: 'Every holding priced and charted, with open lots, unrealized P/L and your own notes on the ticker.',
-    alt: 'A holding page for NVDA: a one-year price chart, position, average cost, unrealized gain, open lots and a thesis note.',
+    id: 'investments',
+    tab: 'Investments',
+    shot: 'investments',
+    blurb: 'Every holding across every account, priced in the background, with allocation, cost basis and P/L.',
+    alt: 'The Investments view: $637,896 total value, a one-year portfolio chart against net contributions, allocation by asset class, and a holdings table.',
   },
 ];
 ---
@@ -138,7 +138,7 @@ const views = [
   .tour:has(.t-home input:checked) :is(.v-home, .b-home),
   .tour:has(.t-networth input:checked) :is(.v-networth, .b-networth),
   .tour:has(.t-spending input:checked) :is(.v-spending, .b-spending),
-  .tour:has(.t-holding input:checked) :is(.v-holding, .b-holding) {
+  .tour:has(.t-investments input:checked) :is(.v-investments, .b-investments) {
     opacity: 1;
   }
   /* Without :has() support, just show Home. */
