@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+---
+
+<Base title="Not found · Basalt">
+  <Nav />
+  <main class="nf narrow">
+    <p class="eyebrow">404</p>
+    <h1>No such file.</h1>
+    <p class="lede">That page isn't in this folder. <a href="/">Back to Basalt</a>.</p>
+  </main>
+</Base>
+
+<style>
+  .nf {
+    padding-block: 18vh;
+  }
+  h1 {
+    font-size: clamp(40px, 6vw, 64px);
+  }
+</style>

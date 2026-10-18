@@ -1,0 +1,98 @@
+---
+import Icon from './Icon.astro';
+const COMMAND = 'brew install --cask navalm/tap/basalt';
+---
+
+<div class="install">
+  <code><span class="prompt" aria-hidden="true">$</span> {COMMAND}</code>
+  <button type="button" class="copy" data-copy={COMMAND} aria-label="Copy the install command">
+    <Icon name="copy" class="i-copy" />
+    <Icon name="check" class="i-check" />
+  </button>
+</div>
+
+<style>
+  .install {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-width: 100%;
+    padding: 6px 6px 6px 18px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--content);
+  }
+  code {
+    overflow-x: auto;
+    color: var(--ink);
+    font-size: 15px;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  @media (max-width: 480px) {
+    code {
+      font-size: 12px;
+    }
+    .install {
+      gap: 0;
+      padding: 4px 4px 4px 12px;
+    }
+    .prompt {
+      margin-right: 4px;
+    }
+  }
+  .prompt {
+    margin-right: 6px;
+    color: var(--muted);
+    user-select: none;
+  }
+  .copy {
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .copy:hover {
+    background: var(--raised);
+    color: var(--ink);
+  }
+  .copy :global(svg) {
+    grid-area: 1 / 1;
+    width: 17px;
+    height: 17px;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .copy :global(.i-check) {
+    opacity: 0;
+    transform: scale(0.6);
+    color: var(--up);
+  }
+  .copy.done :global(.i-copy) {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  .copy.done :global(.i-check) {
+    opacity: 1;
+    transform: none;
+  }
+</style>
+
+<script>
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('button[data-copy]')) {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? '');
+      } catch {
+        return;
+      }
+      btn.classList.add('done');
+      setTimeout(() => btn.classList.remove('done'), 1600);
+    });
+  }
+</script>

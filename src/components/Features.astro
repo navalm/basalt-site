@@ -1,0 +1,270 @@
+---
+// Power-user features: each one pairs a screenshot with the file behind it. The toggle is a
+// checkbox + :has(), so it needs no JavaScript.
+import Icon from './Icon.astro';
+
+interface Feature {
+  id: string;
+  title: string;
+  body: string;
+  shot: string;
+  alt: string;
+  path: string;
+  file: string; // HTML: small spans for syntax color
+}
+
+const features: Feature[] = [
+  {
+    id: 'blocks',
+    title: 'Live <code>```basalt</code> blocks in your notes',
+    body: 'Write your plan in Markdown, then drop in a fenced query. It renders as a live chart or table in read mode and stays plain text on disk. Notes link to accounts, holdings and budgets with [[wikilinks]], and backlinks show up on their own.',
+    shot: 'note',
+    alt: 'A note titled 2026 Plan with a live chart of dining spending over six months and a backlinks sidebar.',
+    path: 'Notes/2026 Plan.md',
+    file: `<span class="k">---</span>
+<span class="k">tags:</span> <span class="v">[plan, annual]</span>
+<span class="k">accounts:</span> <span class="v">["<span class="l">[[Roth IRA]]</span>", "<span class="l">[[Fidelity Brokerage]]</span>"]</span>
+<span class="k">---</span>
+## Targets
+
+- Max <span class="l">[[Roth IRA]]</span> by April — $7,000 ✓ done Mar 24
+- Dining ≤ $950/mo per <span class="l">[[Budgets/2026]]</span> <span class="l">#habit</span>
+
+<span class="f">\`\`\`basalt
+spending category:"Food/Dining" months:6
+\`\`\`</span>`,
+  },
+  {
+    id: 'graph',
+    title: 'A graph of where your money actually goes',
+    body: 'Accounts, securities, payees, categories, notes and tags are all nodes, and edges are sized by dollar flow. Hover an account to see everything it touches, then filter by time range or minimum flow.',
+    shot: 'graph',
+    alt: 'A force-directed graph centered on Fidelity Brokerage, linked to its holdings and notes.',
+    path: 'Accounts/Chase Checking.md',
+    file: `<span class="k">---</span>
+<span class="k">type:</span> <span class="v">account</span>
+<span class="k">kind:</span> <span class="v">checking</span>
+<span class="k">institution:</span> <span class="v">Chase</span>
+<span class="k">opened:</span> <span class="v">2016-08-15</span>
+<span class="k">tags:</span> <span class="v">[cash]</span>
+<span class="k">---</span>
+Everyday account. Paychecks land here on the 1st and
+15th; anything above ~$7.5K is swept to <span class="l">[[Ally Savings]]</span>
+at month end (see <span class="l">[[Emergency fund]]</span>).`,
+  },
+  {
+    id: 'subscriptions',
+    title: 'Subscriptions that post themselves',
+    body: "Every recurring charge is a small note. Basalt posts what's due when you open the vault, shows what's coming in the next 30 days, and works out your real monthly and yearly cost. Pause or cancel one and the file records it.",
+    shot: 'recurring',
+    alt: 'The Subscriptions view: $497.96 per month, upcoming charges, and a table of every recurring payment.',
+    path: 'Recurring/Netflix.md',
+    file: `<span class="k">---</span>
+<span class="k">type:</span> <span class="v">recurring</span>
+<span class="k">account:</span> <span class="v">Amex Gold</span>
+<span class="k">amount:</span> <span class="v">17.99</span>
+<span class="k">payee:</span> <span class="v">Netflix</span>
+<span class="k">category:</span> <span class="v">Subscriptions</span>
+<span class="k">frequency:</span> <span class="v">monthly</span>
+<span class="k">day:</span> <span class="v">7</span>
+<span class="k">start:</span> <span class="v">2024-10-07</span>
+<span class="k">paused:</span> <span class="v">false</span>
+<span class="k">---</span>
+Standard plan. Went from $15.49 to $17.99 in February 2025.`,
+  },
+  {
+    id: 'investments',
+    title: 'Investments, priced and lot-tracked',
+    body: 'Buys, sells, dividends and splits live in the same CSVs as everything else. Basalt tracks FIFO or average-cost lots, pulls quotes in the background, and charts each holding with your trades marked on it.',
+    shot: 'investments',
+    alt: 'The Investments view with portfolio value, allocation and holdings.',
+    path: 'Ledger/Fidelity Brokerage/2026.csv',
+    file: `<span class="k">id,date,type,amount,currency,symbol,quantity,price,…</span>
+01KE70…,2026-01-05,buy,-4524.45,USD,<span class="v">AAPL</span>,15,301.63,…
+01KE73…,2026-01-05,buy,-3024.20,USD,<span class="v">VTI</span>,10,302.42,…
+01KE73…,2026-01-05,buy,-3119.20,USD,<span class="v">BND</span>,40,77.98,…`,
+  },
+  {
+    id: 'rules',
+    title: 'Rules.csv: categorize once, never again',
+    body: 'A pattern, a category and an optional rename, one per line. Type a payee to see which rule wins, preview a re-apply before anything changes, and import statements from Chase, Amex, Bank of America, Schwab and Fidelity.',
+    shot: 'rules',
+    alt: 'The Rules view: a table of payee patterns with categories, renames and match counts.',
+    path: 'Rules.csv',
+    file: `<span class="k">match_field,pattern,category,payee_rename,priority</span>
+payee,whole foods,<span class="v">Food/Groceries</span>,Whole Foods,10
+payee,trader joe,<span class="v">Food/Groceries</span>,Trader Joe's,10
+payee,<span class="f">/^blue bottle/</span>,<span class="v">Food/Dining</span>,Blue Bottle,10
+payee,doordash,<span class="v">Food/Dining</span>,DoorDash,5
+payee,uber,<span class="v">Transport/Rideshare</span>,Uber,5`,
+  },
+  {
+    id: 'budgets',
+    title: 'Budgets in frontmatter, commentary in prose',
+    body: "Your numbers sit in the note's header and your reasoning sits in the body. Basalt tracks every line against what you actually spent, including charges that are scheduled but haven't posted yet.",
+    shot: 'budgets',
+    alt: 'The Budgets view: budget lines with progress bars against actual spending.',
+    path: 'Budgets/2026.md',
+    file: `<span class="k">---</span>
+<span class="k">type:</span> <span class="v">budget</span>
+<span class="k">period:</span> <span class="v">monthly</span>
+<span class="k">lines:</span>
+  <span class="k">Housing/Mortgage:</span> <span class="v">1950</span>
+  <span class="k">Food/Groceries:</span> <span class="v">1150</span>
+  <span class="k">Food/Dining:</span> <span class="v">950</span>
+  <span class="k">Subscriptions:</span> <span class="v">90</span>
+<span class="k">---</span>
+Tightening dining after <span class="l">[[Japan Trip]]</span>.`,
+  },
+];
+---
+
+<div class="features">
+  {
+    features.map((f, i) => (
+      <article class:list={['feature', 'reveal', { flip: i % 2 === 1 }]} id={`f-${f.id}`}>
+        <div class="copy">
+          <h3 set:html={f.title} />
+          <p>{f.body}</p>
+          <label class="toggle">
+            <input type="checkbox" />
+            <span class="track"><i /></span>
+            Show the file behind it
+          </label>
+        </div>
+        <div class="media">
+          <picture class="window shot">
+            <source srcset={`/shots/${f.shot}-light.webp`} media="(prefers-color-scheme: light)" />
+            <img src={`/shots/${f.shot}-dark.webp`} width="1320" height="860" alt={f.alt} loading="lazy" decoding="async" />
+          </picture>
+          <div class="file over">
+            <div class="file-tab">
+              <Icon name={f.path.endsWith('.csv') ? 'sheet' : 'file'} />
+              {f.path}
+            </div>
+            <pre set:html={f.file} />
+          </div>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .features {
+    display: grid;
+    gap: clamp(72px, 10vw, 128px);
+  }
+  .feature {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
+    align-items: center;
+    gap: clamp(28px, 5vw, 64px);
+  }
+  .feature.flip {
+    grid-template-columns: minmax(0, 8fr) minmax(0, 5fr);
+  }
+  .feature.flip .copy {
+    order: 2;
+  }
+  .copy h3 :global(code) {
+    color: var(--accent);
+    font-size: 0.92em;
+  }
+  .copy p {
+    margin: 14px 0 22px;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink-2);
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .toggle input {
+    position: absolute;
+    opacity: 0;
+  }
+  .track {
+    position: relative;
+    width: 34px;
+    height: 20px;
+    border-radius: 99px;
+    background: var(--border);
+    transition: background 0.2s;
+  }
+  .track i {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--ink);
+    transition: transform 0.2s;
+  }
+  .toggle input:checked + .track {
+    background: var(--accent);
+  }
+  .toggle input:checked + .track i {
+    transform: translateX(14px);
+    background: var(--on-accent);
+  }
+  .toggle input:focus-visible + .track {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .media {
+    display: grid;
+  }
+  .media > * {
+    grid-area: 1 / 1;
+  }
+  .shot img {
+    width: 100%;
+  }
+  .over {
+    position: relative;
+    z-index: 1;
+    align-self: center;
+    justify-self: center;
+    width: min(92%, 560px);
+    box-shadow: var(--shadow);
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    pointer-events: none;
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  }
+  .over pre {
+    font-size: 12.5px;
+  }
+  .shot {
+    transition:
+      opacity 0.3s ease,
+      filter 0.3s ease;
+  }
+  .feature:has(.toggle input:checked) .over {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .feature:has(.toggle input:checked) .shot {
+    opacity: 0.35;
+    filter: blur(2px);
+  }
+  @media (max-width: 860px) {
+    .feature,
+    .feature.flip {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .feature.flip .copy {
+      order: 0;
+    }
+  }
+</style>

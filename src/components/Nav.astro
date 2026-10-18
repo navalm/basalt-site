@@ -1,0 +1,77 @@
+---
+---
+
+<header class="nav">
+  <div class="wrap row">
+    <a class="brand" href="/" aria-label="Basalt home">
+      <img src="/favicon.svg" width="24" height="24" alt="" />
+      <span>Basalt</span>
+    </a>
+    <nav aria-label="Sections">
+      <a href="#files">Files</a>
+      <a href="#features">Features</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn primary" href="#install">Install</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid transparent;
+    background: color-mix(in srgb, var(--app) 82%, transparent);
+    backdrop-filter: saturate(1.4) blur(14px);
+    -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  }
+  @supports (animation-timeline: scroll()) {
+    .nav {
+      animation: rule linear both;
+      animation-timeline: scroll();
+      animation-range: 0 120px;
+    }
+  }
+  @keyframes rule {
+    to {
+      border-bottom-color: var(--hairline);
+    }
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    font-size: 14px;
+  }
+  nav a:not(.btn) {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  nav a:not(.btn):hover {
+    color: var(--ink);
+  }
+  nav .btn {
+    height: 34px;
+    padding: 0 14px;
+  }
+  @media (max-width: 640px) {
+    nav a:not(.btn) {
+      display: none;
+    }
+  }
+</style>

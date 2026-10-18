@@ -1,0 +1,14 @@
+# name	env (space-separated KEY=VALUE; values may not contain spaces — use %20)
+home	BASALT_FRESH=1
+spending	BASALT_OPEN=spending
+investments	BASALT_OPEN=investments
+networth	BASALT_OPEN=networth
+budgets	BASALT_OPEN=budgets
+transactions	BASALT_OPEN=transactions
+recurring	BASALT_OPEN=recurring
+rules	BASALT_OPEN=rules BASALT_RULES_TEST=Blue%20Bottle%20Coffee
+graph	BASALT_OPEN=graph BASALT_GRAPH_HOVER=account:Fidelity%20Brokerage
+note	BASALT_OPEN=note:Notes/2026%20Plan.md BASALT_NOTE_MODE=read BASALT_RIGHT_SIDEBAR=links
+ledger	BASALT_OPEN=ledger:Ledger/Chase%20Checking/2026.csv
+palette	BASALT_SHOW=palette
+holding	BASALT_OPEN=holding:NVDA BASALT_RANGE=1Y

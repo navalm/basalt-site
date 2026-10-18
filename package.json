@@ -1,0 +1,25 @@
+{
+  "name": "basalt-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro build && wrangler dev",
+    "deploy": "astro build && wrangler deploy",
+    "db:init": "wrangler d1 execute basalt-waitlist --remote --file=worker/schema.sql",
+    "db:init:local": "wrangler d1 execute basalt-waitlist --local --file=worker/schema.sql",
+    "waitlist:export": "wrangler d1 execute basalt-waitlist --remote --json --command \"SELECT email, created_at FROM waitlist ORDER BY created_at\"",
+    "shots": "scripts/shots.sh"
+  },
+  "dependencies": {
+    "astro": "^7.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.1"
+  }
+}

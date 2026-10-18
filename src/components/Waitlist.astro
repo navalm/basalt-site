@@ -1,0 +1,102 @@
+---
+// Posts to the Worker's /api/waitlist. Works without JavaScript (the Worker redirects back
+// with ?joined=1|0); with it, the answer shows inline.
+---
+
+<form class="waitlist" method="post" action="/api/waitlist" data-waitlist>
+  <label class="sr-only" for="wl-email">Email address</label>
+  <input id="wl-email" name="email" type="email" required autocomplete="email" placeholder="you@example.com" maxlength="254" />
+  <div class="hp" aria-hidden="true">
+    <label for="wl-website">Leave this empty</label>
+    <input id="wl-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <button class="btn primary" type="submit">Notify me</button>
+  <p class="msg" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .waitlist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 460px;
+  }
+  input[type='email'] {
+    flex: 1 1 220px;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--content);
+    color: var(--ink);
+    font: 15px var(--sans);
+  }
+  input[type='email']::placeholder {
+    color: var(--muted);
+  }
+  input[type='email']:focus {
+    border-color: var(--accent);
+    outline: 3px solid var(--accent-wash);
+    outline-offset: 0;
+  }
+  .btn {
+    height: 44px;
+  }
+  .btn[disabled] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+  }
+  .msg {
+    flex-basis: 100%;
+    min-height: 1.5em;
+    margin: 4px 0 0;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  .msg.ok {
+    color: var(--up);
+  }
+  .msg.err {
+    color: var(--down);
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-waitlist]');
+  const msg = form?.querySelector<HTMLElement>('.msg');
+  const button = form?.querySelector<HTMLButtonElement>('button');
+  const show = (ok: boolean, text: string) => {
+    if (!msg) return;
+    msg.textContent = text;
+    msg.className = `msg ${ok ? 'ok' : 'err'}`;
+  };
+
+  // No-JS round trip: the Worker redirected back here.
+  const joined = new URLSearchParams(location.search).get('joined');
+  if (joined === '1') show(true, "You're on the list. We'll send one email when Basalt 1.0 ships.");
+  if (joined === '0') show(false, "That didn't work. Check the address and try again.");
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!button) return;
+    button.disabled = true;
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      const data = await res.json().catch(() => null);
+      show(res.ok, data?.message ?? 'Something went wrong. Try again later.');
+      if (res.ok) form.reset();
+    } catch {
+      show(false, "Couldn't reach the server. Check your connection and try again.");
+    } finally {
+      button.disabled = false;
+    }
+  });
+</script>
