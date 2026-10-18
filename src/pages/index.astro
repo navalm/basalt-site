@@ -6,6 +6,7 @@ import InstallCommand from '../components/InstallCommand.astro';
 import FileDemo from '../components/FileDemo.astro';
 import Features from '../components/Features.astro';
 import Waitlist from '../components/Waitlist.astro';
+import AppTour from '../components/AppTour.astro';
 
 // Measured with the app repo's tests/perf.rs (release build, Apple M4, a generated
 // 100,000-transaction vault, 2026-10-18). Re-measure before changing these.
@@ -160,7 +161,24 @@ const faq = [
       </div>
     </section>
 
-    <!-- Speed -->
+    <!-- The app -->
+    <section id="app" class="app-section">
+      <div class="wrap">
+        <div class="section-head centered reveal">
+          <p class="eyebrow">The app</p>
+          <h2>A real app on top.</h2>
+          <p class="lede">
+            The files are the foundation, not the interface. Day to day you work in a fast, native Mac app that shows
+            your whole financial picture at a glance.
+          </p>
+        </div>
+        <div class="reveal">
+          <AppTour />
+        </div>
+      </div>
+    </section>
+
+
     <section class="speed">
       <div class="wrap">
         <div class="section-head reveal">
@@ -413,6 +431,18 @@ const faq = [
       opacity: 0;
       transform: translateX(-8px);
     }
+  }
+
+  /* The app */
+  .app-section {
+    border-top: 1px solid var(--hairline);
+  }
+  .centered {
+    margin-inline: auto;
+    text-align: center;
+  }
+  .centered .lede {
+    margin-inline: auto;
   }
 
   /* Speed */
