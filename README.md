@@ -37,7 +37,7 @@ every animation honors `prefers-reduced-motion`.
 
 ```sh
 npx wrangler login
-npx wrangler d1 create basalt-waitlist   # paste the printed database_id into wrangler.jsonc
+# (done) the D1 database basalt-waitlist exists; its id is in wrangler.jsonc
 npm run db:init                          # create the table in the remote database
 npm run deploy                           # astro build && wrangler deploy (also sets up basalt.navalm.com)
 ```

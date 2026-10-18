@@ -16,8 +16,7 @@
     {
       "binding": "DB",
       "database_name": "basalt-waitlist",
-      // Paste the id printed by `npx wrangler d1 create basalt-waitlist`.
-      "database_id": "00000000-0000-0000-0000-000000000000"
+      "database_id": "926b56ef-df98-4ec6-a171-11446f02e5f3"
     }
   ],
   "ratelimits": [
